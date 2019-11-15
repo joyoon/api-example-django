@@ -94,3 +94,8 @@ ENV/
 
 # secret environment stuff
 docker/environment
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

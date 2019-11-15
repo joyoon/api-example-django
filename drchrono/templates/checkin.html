@@ -2,9 +2,158 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Patient Check In</title>
 </head>
 <body>
-$END$
+<h1>Patient Check In</h1>
+
+<table>
+    <tr>
+        <td>First Name:</td>
+        <td><input id="txtFirstName" type="text"></td>
+    </tr>
+    <tr>
+        <td>Last Name:</td>
+        <td><input id="txtLastName" type="text"></td>
+    </tr>
+    <tr>
+        <td><input id="btnSubmit" type="button" value="Submit"></td>
+    </tr>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(function() {
+        checkinScreen.init();
+    });
+
+    var checkinScreen = {
+        init: function() {
+            var that = this;
+
+            // event handlers
+            $('#btnSubmit').on('click', function() {
+                that.onSubmit();
+            });
+
+            $('#btnSavePatientData').on('click', function() {
+                let patient = that.getPatientData();
+                that.savePatientData(patient);
+            });
+        },
+        onSubmit: function() {
+            var that = this;
+            let url = '/api/patients?firstName=' + $('#txtFirstName').val() + '&lastName=' + $('#txtLastName').val();
+
+            $.ajax({
+                url: url
+            })
+            .done(function(data) {
+                if (!data.patient)
+                    console.log('invalid user');
+
+                else {
+                    console.log(data.patient);
+
+                    // populate patient demographic data
+                    that.populatePatientData(data.patient);
+
+                    // populate appointment data
+                    that.populateAppointmentData(data.patient);
+                }
+            });
+        },
+        populatePatientData: function(patient) {
+            $('#hdnPatientId').val(patient.id);
+            $('#spnGender').text(patient.gender);
+            $('#tblPatientData').css('visibility', 'visible');
+            $('#txtFname').val(patient.first_name);
+            $('#txtLname').val(patient.last_name);
+            $('#txtAddress').val(patient.address);
+            $('#txtDOB').val(patient.date_of_birth);
+        },
+        populateAppointmentData: function(patient) {
+            // get patient appointments
+            let url = '/api/patients/' + patient.id + '/appointments/';
+
+            $.ajax({
+                url: url
+            })
+            .done(function(data) {
+                console.log('appointments');
+                console.log(data.appointments);
+            });
+        },
+        getPatientData: function() {
+            let patient = {
+                id: $('#hdnPatientId').val(),
+                gender: $('#spnGender').text(),
+                firstName: $('#txtFname').val(),
+                dob: $('#txtDOB').val(),
+                address: $('#txtAddress').val()
+            };
+
+            return patient;
+        },
+        savePatientData: function(patient) {
+            let that = this;
+            let url = '/api/patients/' + patient.id + '/';
+            let data = {
+                id: patient.id,
+                doctor: 252849,
+                address: patient.address,
+                gender: patient.gender,
+                dob: patient.date_of_birth
+            };
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: data
+            })
+            .done(function(data) {
+                console.log(data);
+            });
+        }
+    };
+</script>
+
+    <table id="tblPatientData" style="margin-top: 100px; visibility: hidden">
+        <tr>
+            <td><input id="hdnPatientId" hidden></td>
+        </tr>
+        <tr>
+            <td>First Name</td>
+            <td><input id="txtFname" type="text"></input></td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td><input id="txtLname" type="text"></input></td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td><input id="txtDOB" type="text"></input></td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td><span id="spnGender"></span></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><input id="txtAddress" type="text"></input></td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td><input type="text"></input></td>
+        </tr>
+    </table>
+
+    <input id="btnSavePatientData" type="button" value="Save"/>
+
+    <table style="display: none">
+        <tr>
+            <td>Appointment time:</td>
+            <td></td>
+        </tr>
+    </table>
 </body>
 </html>

@@ -27,6 +27,21 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+
+# CORS_REPLACE_HTTPS_REFERER = True
+# HOST_SCHEME = "https://"
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_SECONDS = 1000000
+# SECURE_FRAME_DENY = True
 
 # Application definition
 
@@ -40,6 +55,7 @@ INSTALLED_APPS = (
     'drchrono',
     'social_django',
     'rest_framework',
+    'sslserver'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,9 +134,11 @@ STATIC_URL = '/static/'
 # 3.2) change your hostname if you're using a different way to access this kiosk; by default it'll run on localhost:8080
 # 4) copy your CLIENT_ID and SECRET keys into a file docker/environment. See the example
 # 5) Ask a dev if this doesn't work quickly; these settings can be fiddly, and we'd rather not wast time with them.
-SOCIAL_AUTH_DRCHRONO_KEY = os.getenv('SOCIAL_AUTH_CLIENT_ID')
-SOCIAL_AUTH_DRCHRONO_SECRET = os.getenv('SOCIAL_AUTH_SECRET')
+# SOCIAL_AUTH_DRCHRONO_KEY = os.getenv('SOCIAL_AUTH_CLIENT_ID')
+# SOCIAL_AUTH_DRCHRONO_SECRET = os.getenv('SOCIAL_AUTH_SECRET')
 
+SOCIAL_AUTH_DRCHRONO_KEY = "iBDL2NJtVQzQ5RXYgY1BaqaYAsbqFiA0bpdWaI7m"
+SOCIAL_AUTH_DRCHRONO_SECRET = "QdXJ6BLHSK0jmEIkkjJhDYcr8Y0SNvv8O69ZKpaKSsqMnHGYV3V1BGXAQIUcehTLL6vCqRD3yoKbiIU04axmmjQK36SKSj8ORGt3vcUuA09sQBzzAMj8aWNAzvjNkMTT"
 
 LOGIN_REDIRECT_URL = '/welcome/'
 LOGIN_URL = 'login/drchrono'

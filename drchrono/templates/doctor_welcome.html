@@ -6,6 +6,9 @@
 </head>
 <body>
 <h1>Welcome {{ doctor.first_name }} {{ doctor.last_name }}</h1>
-{{ doctor }}
+
+<a href="/appointments?date={{date.year}}-{{date.month}}-{{date.day}}">Appointments</a>
+<a href="/checkin" style="display: block">Check in</a>
+
 </body>
 </html>

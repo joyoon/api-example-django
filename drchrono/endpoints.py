@@ -1,5 +1,6 @@
 import requests
 import logging
+import time
 
 
 class APIException(Exception): pass
@@ -180,9 +181,25 @@ class BaseEndpoint(object):
 class PatientEndpoint(BaseEndpoint):
     endpoint = "patients"
 
+    def create(self, data=None, json=None, **kwargs):
+
+        return super(PatientEndpoint, self).create(data, **kwargs)
+
+    def list(self, params=None, **kwargs):
+        """
+        List appointments on a given date, or between two dates
+        """
+        # Just parameter parsing & checking
+        params = params or {}
+
+        return super(PatientEndpoint, self).list(params, **kwargs)
 
 class AppointmentEndpoint(BaseEndpoint):
     endpoint = "appointments"
+
+    def create(self, data=None, json=None, **kwargs):
+
+        return super(AppointmentEndpoint, self).create(data, **kwargs)
 
     # Special parameter requirements for a given resource should be explicitly called out
     def list(self, params=None, date=None, start=None, end=None, **kwargs):
@@ -191,6 +208,7 @@ class AppointmentEndpoint(BaseEndpoint):
         """
         # Just parameter parsing & checking
         params = params or {}
+
         if start and end:
             date_range = "{}/{}".format(start, end)
             params['date_range'] = date_range
@@ -198,8 +216,10 @@ class AppointmentEndpoint(BaseEndpoint):
             params['date'] = date
         if 'date' not in params and 'date_range' not in params:
             raise Exception("Must provide either start & end, or date argument")
-        return super(AppointmentEndpoint, self).list(params, **kwargs)
 
+        params['office'] = 269267
+
+        return super(AppointmentEndpoint, self).list(params, **kwargs)
 
 class DoctorEndpoint(BaseEndpoint):
     endpoint = "doctors"
@@ -211,8 +231,10 @@ class DoctorEndpoint(BaseEndpoint):
         raise NotImplementedError("the API does not allow creating doctors")
 
     def delete(self, id, **kwargs):
-        raise NotImplementedError("the API does not allow deleteing doctors")
-
+        raise NotImplementedError("the API does not allow deleting doctors")
 
 class AppointmentProfileEndpoint(BaseEndpoint):
     endpoint = "appointment_profiles"
+
+class OfficeEndpoint(BaseEndpoint):
+    endpoint = "offices"

@@ -2,9 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
 </head>
+
+<table border-collapse="collapse" border="1px solid">
+    {% for s in model.scheduleData %}
+    <tr>
+        <td>
+            <p>{{s.hourInterval}}</p>
+        </td>
+        <td style="min-width: 100px">
+            {% if s.appointment %}
+            <p>patient: {{s.appointment.patient}}</p>
+            <p>status: {{s.appointment.status}}</p>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
 <body>
-$END$
+
 </body>
 </html>
